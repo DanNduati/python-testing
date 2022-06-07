@@ -56,5 +56,30 @@ The output then indicates the status of each test using a syntax similar to unit
 
 For tests that fail, the report gives a detailed breakdown of the failure. In the example above, the test failed because assert False always fails. Finally, the report gives an overall status report of the test suite.
 
+### 2. State and dependency management
+Pytest enables explicit dependency declarations by use of <b>fixtures</b>. Fixtures are functions that create data or test doubles or initialize some system state for the test suite. Any test that wants to use a fixture must explicitly accept it as an argument, so dependencies are always stated upfront.Fixtures can also make use of other fixtures, again by declaring them explicitly as dependencies.
+
+### 3. Test filtering
+As your test suite grows, you may find that you want to run just a few tests on a feature and save the full suite for later. pytest provides a few ways of doing this:
+- <b>Name-based filtering</b> : You can limit pytest to running only those tests whose fully qualified names match a particular expression. You can do this with the -k parameter.
+- <b>Directory scoping</b> : By default, pytest will run only those tests that are in or under the current directory.
+- <b>Test categorization</b> : pytest can include or exclude tests from particular categories that you define. You can do this with the -m parameter.
+
+Test categorization in particular is a subtly powerful tool. pytest enables you to create marks, or custom labels, for any test you like. A test may have multiple labels, and you can use them for granular control over which tests to run. Later in this tutorial, you’ll see an example of how pytest marks work and learn how to make use of them in a large test suite.
+
+### 4. Test Parameterization
+When you’re testing functions that process data or perform generic transformations, you’ll find yourself writing many similar tests. They may differ only in the input or output of the code being tested. This requires duplicating test code, and doing so can sometimes obscure the behavior you’re trying to test. pytest offers a way of collecting several tests into one in which each test can pass or fail independently.
+
+### 5. Plugin-Based Architecture
+pytest users have developed a rich ecosystem of helpful plugins due to its openness to customization
+
+
+#### Fixtures:Managing State and Dependencies
+pytest fixtures are a way of providing data, test doubles, or state setup to your tests. Fixtures are functions that can return a wide range of values. Each test that depends on a fixture must explicitly accept that fixture as an argument.
+##### When to create fixtures
+If you find yourself writing several tests that all make use of the same underlying test data, then a fixture may be in your future. You can put the repeated data into a single function decorated with @pytest.fixture to indicate that the function is a pytest fixture.You can then use the fixture by adding it as an argument to your tests. Its value will be the return value of the fixture function.
+#### Fixtures at scale
+You can move fixtures from test modules into more general fixture-related modules. That way, you can import them back into any test modules that need them. This is a good approach when you find yourself using a fixture repeatedly throughout your project.
+pytest looks for `conftest.py` modules throughout the directory structure. Each conftest.py provides configuration for the file tree pytest finds it in. You can use any fixtures that are defined in a particular `conftest.py` throughout the file’s parent directory and in any subdirectories. This is a great place to put your most widely used fixtures.
 ## <b>License</b>
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=for-the-badge)](LICENSE)
