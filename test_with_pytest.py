@@ -5,7 +5,7 @@ import requests
 def test_always_pass():
     assert True
 
-@pytest.mark.failure
+@pytest.mark.xfail
 def test_always_fail():
     assert False
 
