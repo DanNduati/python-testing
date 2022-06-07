@@ -1,4 +1,5 @@
 import pytest
+import requests
 
 
 def test_always_pass():
@@ -27,6 +28,7 @@ def test_some_primes():
 
 # Fixtures: Managing state and dependencies
 # You can put the repeated data (peoples list) into a single function decorated with @pytest.fixture to indicate the function is a pytest fixture
+# Arrange
 @pytest.fixture
 def example_people_data():
     return [
@@ -53,7 +55,10 @@ def format_data_for_display(people):
 
 
 def test_format_data_for_display(example_people_data):
-    assert format_data_for_display(example_people_data) == [
+    # Act
+    fmt_data = format_data_for_display(example_people_data)
+    # Assert
+    assert fmt_data == [
         "Alfonsa Ruiz Senior Software Engineer",
         "Sayid Khan Project Manager",
     ]
@@ -61,6 +66,7 @@ def test_format_data_for_display(example_people_data):
 
 def format_data_for_excel(people):
     # implement this!
+    # r = requests.get("https://google.com") this should raise a runtime error from the autouse fixture
     return """given,family,title"""
 
 
