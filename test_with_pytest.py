@@ -23,3 +23,46 @@ def test_some_primes():
         for num in range(1, 50)
         if num != 1 and not any([num % div == 0 for div in range(2, num)])
     }
+
+
+# Fixtures: Managing state and dependencies
+# You can put the repeated data (peoples list) into a single function decorated with @pytest.fixture to indicate the function is a pytest fixture
+@pytest.fixture
+def example_people_data():
+    return [
+        {
+            "given_name": "Alfonsa",
+            "family_name": "Ruiz",
+            "title": "Senior Software Engineer",
+        },
+        {
+            "given_name": "Sayid",
+            "family_name": "Khan",
+            "title": "Project Manager",
+        },
+    ]
+
+
+def format_data_for_display(people):
+    people_list = []
+    for person in people:
+        people_list.append(
+            f"{person['given_name']} {person['family_name']} {person['title']}"
+        )
+    return people_list
+
+
+def test_format_data_for_display(example_people_data):
+    assert format_data_for_display(example_people_data) == [
+        "Alfonsa Ruiz Senior Software Engineer",
+        "Sayid Khan Project Manager",
+    ]
+
+
+def format_data_for_excel(people):
+    # implement this!
+    return """given,family,title"""
+
+
+def test_format_data_for_excel(example_people_data):
+    assert format_data_for_excel(example_people_data) == """given,family,title"""
