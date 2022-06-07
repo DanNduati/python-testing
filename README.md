@@ -81,5 +81,19 @@ If you find yourself writing several tests that all make use of the same underly
 #### Fixtures at scale
 You can move fixtures from test modules into more general fixture-related modules. That way, you can import them back into any test modules that need them. This is a good approach when you find yourself using a fixture repeatedly throughout your project.
 pytest looks for `conftest.py` modules throughout the directory structure. Each conftest.py provides configuration for the file tree pytest finds it in. You can use any fixtures that are defined in a particular `conftest.py` throughout the file’s parent directory and in any subdirectories. This is a great place to put your most widely used fixtures.
+
+#### Marks:Categorizing Tests
+Pytest enables you to define categories for your tests and provide options for including or excluding categories when you run your suite. One can mark a test with any number of categories
+Marking tests is useful for categorizing tests by subsystems or dependencies eg:
+`@pytest.mark.database_access` for tests that require database access. To run all tests *except* those that require database access you can use `pytest -m "not database_access"`
+
+pytest provides a few marks out of the box:
+
+- **skip** skips a test unconditionally.
+- **skipif** skips a test if the expression passed to it evaluates to True.
+- **xfail** indicates that a test is expected to fail, so if the test does fail, the overall suite can still result in a passing status.
+- **parametrize** creates multiple variants of a test with different values as arguments.
+
+You can see a list of all the marks pytest knows about by running `pytest --markers`
 ## <b>License</b>
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=for-the-badge)](LICENSE)
