@@ -133,7 +133,39 @@ test_with_pytest.py::test_is_palindrome[abab-False] PASSED               [100%]
 0.00s setup    test_with_pytest.py::test_get_my_ip
 ======================== 14 passed, 1 xfailed in 0.12s =========================
 ```
+### **Useful pytest plugins**
+#### **pytest-cov**
+Code coverage is an importnt aspect of tests. It's a metric which tells you the ratio between the number of lines executed during test runs and the total number of all lines in your code base.We can use the `pytest-cov` plugin for this, which integrates Coverage.py with pytest.
+```bash
+$ pipenv install pytest-cov
+# Usage
+$ python -m pytest --cov=.
+# Produces a report like:
+============================= test session starts ==============================
+platform linux -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0
+rootdir: /home/daniel/Desktop/learn/python_testing, configfile: pytest.ini
+plugins: cov-3.0.0
+collected 15 items                                                             
 
+test_with_pytest.py .x.............                                      [100%]
+
+---------- coverage: platform linux, python 3.10.4-final-0 -----------
+Name                  Stmts   Miss  Cover
+-----------------------------------------
+conftest.py               7      1    86%
+test_with_pytest.py      49      0   100%
+-----------------------------------------
+TOTAL                    56      1    98%
+
+
+======================== 14 passed, 1 xfailed in 0.19s =========================
+```
+For every file in the project's path you get:
+
+- Stmts - number of lines of code
+- Miss - number of lines that weren't executed by the tests
+- Cover - coverage percentage for the file
+At the bottom, there's a line with the totals for the whole project.
 ## <b>References</b>
 1. https://realpython.com/pytest-python-testing/
 2. https://testdriven.io/blog/testing-python/
