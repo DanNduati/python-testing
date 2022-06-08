@@ -74,15 +74,15 @@ When you’re testing functions that process data or perform generic transformat
 pytest users have developed a rich ecosystem of helpful plugins due to its openness to customization
 
 
-#### Fixtures:Managing State and Dependencies
+#### **Fixtures:Managing State and Dependencies**
 pytest fixtures are a way of providing data, test doubles, or state setup to your tests. Fixtures are functions that can return a wide range of values. Each test that depends on a fixture must explicitly accept that fixture as an argument.
-##### When to create fixtures
+##### **When to create fixtures**
 If you find yourself writing several tests that all make use of the same underlying test data, then a fixture may be in your future. You can put the repeated data into a single function decorated with @pytest.fixture to indicate that the function is a pytest fixture.You can then use the fixture by adding it as an argument to your tests. Its value will be the return value of the fixture function.
-#### Fixtures at scale
+#### **Fixtures at scale**
 You can move fixtures from test modules into more general fixture-related modules. That way, you can import them back into any test modules that need them. This is a good approach when you find yourself using a fixture repeatedly throughout your project.
 pytest looks for `conftest.py` modules throughout the directory structure. Each conftest.py provides configuration for the file tree pytest finds it in. You can use any fixtures that are defined in a particular `conftest.py` throughout the file’s parent directory and in any subdirectories. This is a great place to put your most widely used fixtures.
 
-#### Marks:Categorizing Tests
+#### **Marks:Categorizing Tests**
 Pytest enables you to define categories for your tests and provide options for including or excluding categories when you run your suite. One can mark a test with any number of categories
 Marking tests is useful for categorizing tests by subsystems or dependencies eg:
 `@pytest.mark.database_access` for tests that require database access. To run all tests *except* those that require database access you can use `pytest -m "not database_access"`
@@ -95,5 +95,48 @@ pytest provides a few marks out of the box:
 - **parametrize** creates multiple variants of a test with different values as arguments.
 
 You can see a list of all the marks pytest knows about by running `pytest --markers`
+
+#### **Parametrization: Combining Tests**
+Although fixtures can be used to reduce code dublication by extracting common dependencies they aren't quite useful whenn you have several tests with slightly different inputs and expected outputs. In such cases you can parametrize a single test definition and pytest will create variants of the test for you with the parameters you specify.
+
+#### **Durations Reports: Fighting Slow Tests**
+Pytest can automatically record test durations for you and report the top offenders.Use the --durations option to the pytest command to include a duration report in your test results. --durations expects an integer value n and will report the slowest n number of tests. The output will follow your test results:
+```bash
+$ pytest --durations=5 -vv
+============================= test session starts ==============================
+platform linux -- Python 3.10.4, pytest-7.1.2, pluggy-1.0.0 -- /home/daniel/.local/share/virtualenvs/python_testing-TXRbz4By/bin/python
+cachedir: .pytest_cache
+rootdir: /home/daniel/Desktop/learn/python_testing, configfile: pytest.ini
+collected 15 items                                                             
+
+test_with_pytest.py::test_always_pass PASSED                             [  6%]
+test_with_pytest.py::test_always_fail XFAIL                              [ 13%]
+test_with_pytest.py::test_capitalize PASSED                              [ 20%]
+test_with_pytest.py::test_reversed PASSED                                [ 26%]
+test_with_pytest.py::test_some_primes PASSED                             [ 33%]
+test_with_pytest.py::test_format_data_for_display PASSED                 [ 40%]
+test_with_pytest.py::test_format_data_for_excel PASSED                   [ 46%]
+test_with_pytest.py::test_get_my_ip PASSED                               [ 53%]
+test_with_pytest.py::test_is_palindrome[-True] PASSED                    [ 60%]
+test_with_pytest.py::test_is_palindrome[a-True] PASSED                   [ 66%]
+test_with_pytest.py::test_is_palindrome[Bob-True] PASSED                 [ 73%]
+test_with_pytest.py::test_is_palindrome[Never odd or even-True] PASSED   [ 80%]
+test_with_pytest.py::test_is_palindrome[Do geese see God?-True] PASSED   [ 86%]
+test_with_pytest.py::test_is_palindrome[abc-False] PASSED                [ 93%]
+test_with_pytest.py::test_is_palindrome[abab-False] PASSED               [100%]
+
+============================= slowest 5 durations ==============================
+0.01s call     test_with_pytest.py::test_get_my_ip
+0.00s setup    test_with_pytest.py::test_is_palindrome[Never odd or even-True]
+0.00s setup    test_with_pytest.py::test_is_palindrome[-True]
+0.00s setup    test_with_pytest.py::test_some_primes
+0.00s setup    test_with_pytest.py::test_get_my_ip
+======================== 14 passed, 1 xfailed in 0.12s =========================
+```
+
+## <b>References</b>
+1. https://realpython.com/pytest-python-testing/
+2. https://testdriven.io/blog/testing-python/
+
 ## <b>License</b>
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=for-the-badge)](LICENSE)
