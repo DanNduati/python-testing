@@ -5,6 +5,7 @@ import requests
 def test_always_pass():
     assert True
 
+
 @pytest.mark.xfail
 def test_always_fail():
     assert False
@@ -72,3 +73,27 @@ def format_data_for_excel(people):
 
 def test_format_data_for_excel(example_people_data):
     assert format_data_for_excel(example_people_data) == """given,family,title"""
+
+
+def get_my_ip():
+    response = requests.get("http://ipinfo.io/json")
+    return response.json()["ip"]
+
+
+def test_get_my_ip(monkeypatch):
+    # Automated tests should be fast, isolated/independent, and deterministic/repeatable.
+    # Thus if you need to test code that makes an external HTTP request to a third-party API
+    # you should mock the request
+    my_ip = "123.123.123.123"
+
+    class MockResponse:
+        def __init__(self, json_body):
+            self.json_body = json_body
+
+        def json(self):
+            return self.json_body
+
+    monkeypatch.setattr(
+        requests, "get", lambda *args, **kwargs: MockResponse({"ip": my_ip})
+    )
+    assert get_my_ip() == my_ip
