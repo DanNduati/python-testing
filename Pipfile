@@ -16,6 +16,7 @@ typing-extensions = "==4.2.0"
 zipp = "==3.8.0"
 black = "*"
 requests = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
