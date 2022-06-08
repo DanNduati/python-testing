@@ -1,5 +1,7 @@
+from unittest import mock
 import pytest
 import requests
+from requests import Response
 
 
 def test_always_pass():
@@ -85,15 +87,7 @@ def test_get_my_ip(monkeypatch):
     # Thus if you need to test code that makes an external HTTP request to a third-party API
     # you should mock the request
     my_ip = "123.123.123.123"
-
-    class MockResponse:
-        def __init__(self, json_body):
-            self.json_body = json_body
-
-        def json(self):
-            return self.json_body
-
-    monkeypatch.setattr(
-        requests, "get", lambda *args, **kwargs: MockResponse({"ip": my_ip})
-    )
+    response = mock.create_autospec(Response)
+    response.json.return_value = {"ip": my_ip}
+    monkeypatch.setattr(requests, "get", lambda *args, **kwargs: response)
     assert get_my_ip() == my_ip
